@@ -1,0 +1,24 @@
+version '1'
+services:
+    bln_db:
+      image: mysql
+      ports:
+        - 3306:3306
+      restart: always
+      environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  mailer_web:
+      depends_on:
+        - bln_db
+      tty: true
+      build:
+        context: ../
+        dockerfile: Dockerfile 
+      ports:
+        - "80:80"
+      volumes:
+        - ../:/var/www/BridgeLoanNetwork
+        - ./conf:/conf
+      links:
+        - "bln_db"
