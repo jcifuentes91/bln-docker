@@ -1,20 +1,22 @@
-version '1'
+version: '3'
 services:
     bln_db:
       image: mysql
       ports:
         - 3306:3306
       restart: always
+      volumes:
+        - ./conf/db:/docker-entrypoint-initdb.d
       environment:
-      MYSQL_ROOT_PASSWORD: root
+        MYSQL_ROOT_PASSWORD: root
 
-  mailer_web:
+    bln_web:
       depends_on:
         - bln_db
       tty: true
       build:
         context: ../
-        dockerfile: Dockerfile 
+        dockerfile: DockerFile 
       ports:
         - "80:80"
       volumes:
