@@ -60,7 +60,7 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
+		'host' => 'bln_db',
 		'login' => 'root',
 		'password' => 'root',
 		'database' => 'bridgelo_staging_main',
@@ -70,9 +70,9 @@ class DATABASE_CONFIG {
 	public $master = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
-        'password' => 'root',
+		'host' => 'bln_db',
+		'login' => 'master_admin',
+        'password' => 'master_admin',
         'database' => 'staging_loans',
 		//'login' => 'root',
 		//'password' => 'root',
