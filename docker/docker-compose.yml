@@ -16,6 +16,9 @@ services:
         DB_PASSWORD: master_admin
         DB_DATABASE: staging_loans
 
+    bln_redis:
+          image: redis
+
     bln_web:
       depends_on:
         - bln_db
@@ -31,3 +34,4 @@ services:
         - ./conf:/conf
       links:
         - "bln_db"
+        - "bln_redis"

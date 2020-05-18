@@ -49,4 +49,9 @@ RUN pecl install redis-4.0.1 \
 
 COPY docker/conf/php-development.ini /usr/local/etc/php/php.ini
 COPY docker/conf/ssl/bln.local.conf  /etc/apache2/sites-available/bln.local.conf
+COPY docker/app/Config/core.php app/Config/core.php
+COPY docker/app/Config/database.php app/Config/database.php
+COPY docker/composer.json composer.json
+
 RUN a2ensite bln.local
+RUN composer install

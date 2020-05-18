@@ -350,7 +350,7 @@ $prefix = 'myapp_';
 Cache::config('_cake_core_', array(
     //'engine' => 'File',
     'engine' => 'Redis',
-    'server' => '127.0.0.1',
+    'server' => 'bln_redis',
     'port' => '6379',
     'prefix' => $prefix . 'cake_core_',
     'database' => '1',
@@ -367,7 +367,7 @@ Cache::config('_cake_core_', array(
 Cache::config('_cake_core_', array(
     //'engine' => 'File',
     'engine' => 'Redis',
-    'server' => '127.0.0.1',
+    'server' => 'bln_redis',
     'port' => '6379',
     'prefix' => $prefix . 'cake_core_',
     'database' => '1',
