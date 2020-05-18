@@ -6,6 +6,7 @@ ADD docker /var/www/BridgeLoanNetwork
 COPY docker/conf/php-development.ini /usr/local/etc/php/
 RUN a2enmod rewrite
 RUN a2enmod headers
+RUN a2enmod ssl
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
@@ -47,3 +48,5 @@ RUN pecl install redis-4.0.1 \
     && docker-php-ext-enable redis xdebug
 
 COPY docker/conf/php-development.ini /usr/local/etc/php/php.ini
+COPY docker/conf/ssl/bln.local.conf  /etc/apache2/sites-available/bln.local.conf
+RUN a2ensite bln.local
