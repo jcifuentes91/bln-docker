@@ -1,7 +1,7 @@
 version: '3'
 services:
     bln_db:
-      image: mysql
+      image: mysql:5.7
       ports:
         - 3306:3306
       restart: always
@@ -9,6 +9,12 @@ services:
         - ./conf/db:/docker-entrypoint-initdb.d
       environment:
         MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: master_admin
+        MYSQL_PASSWORD: master_admin
+        DB_HOSTNAME: bln_db
+        DB_USERNAME: master_admin
+        DB_PASSWORD: master_admin
+        DB_DATABASE: staging_loans
 
     bln_web:
       depends_on:
