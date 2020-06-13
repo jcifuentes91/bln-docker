@@ -1,8 +1,8 @@
 FROM php:7.1.16-apache
 MAINTAINER Javier Cifuentes <jcifuentes91@hotmail.com>
 
-ENV APACHE_DOCUMENT_ROOT /var/www/BridgeLoanNetwork
-ADD docker /var/www/BridgeLoanNetwork
+ENV APACHE_DOCUMENT_ROOT /var/www/repos
+ADD docker /var/www/repos
 COPY docker/conf/php-development.ini /usr/local/etc/php/
 RUN a2enmod rewrite
 RUN a2enmod headers
@@ -39,7 +39,7 @@ RUN apt-get install -y iputils-ping net-tools vim-tiny less
 # Install npm
 #RUN apt-get install -y npm
 
-WORKDIR /var/www/BridgeLoanNetwork
+WORKDIR /var/www/repos
 
 RUN pecl install redis-4.0.1 \
     && pecl install --nodeps mcrypt-snapshot \
@@ -47,7 +47,15 @@ RUN pecl install redis-4.0.1 \
     && pecl install xdebug-2.6.0 \
     && docker-php-ext-enable redis xdebug
 
+RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
+
 COPY docker/conf/php-development.ini /usr/local/etc/php/php.ini
 COPY docker/conf/ssl/bln.local.conf  /etc/apache2/sites-available/bln.local.conf
+COPY docker/conf/ssl/api.localbln.conf  /etc/apache2/sites-available/api.localbln.conf
+COPY docker/conf/ssl/devel-blnsoftware.com.conf  /etc/apache2/sites-available/devel-blnsoftware.com.conf
 
 RUN a2ensite bln.local
+RUN a2ensite api.localbln
+RUN a2ensite devel-blnsoftware.com

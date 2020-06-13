@@ -7,6 +7,7 @@ services:
       restart: always
       volumes:
         - ./conf/db:/docker-entrypoint-initdb.d
+        - ./conf/mysql:/etc/mysql/conf.d
       environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_USER: master_admin
@@ -19,22 +20,24 @@ services:
     bln_redis:
       image: redis
       restart: always
-
-    bln_traefik:
-      image: traefik:v2.2
-      command:
-        - --entrypoints.web-secure.address=:443
-        - --api.insecure=true
-        - --providers.docker
-        - --providers.file.directory=/configuration/
-        - --providers.file.watch=true
       ports:
-        - "8080:8080"
-        - "80:80"
-        - "443:443"
-      volumes:
-        - "./conf:/configuration:ro"
-        - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        - "6379:6379"
+
+##    bln_traefik:
+##      image: traefik:v2.2
+##      command:
+##        - --entrypoints.web-secure.address=:443
+##        - --api.insecure=true
+##        - --providers.docker
+##        - --providers.file.directory=/configuration/
+##        - --providers.file.watch=true
+##      ports:
+##        - "8080:8080"
+##        - "80:80"
+##        - "443:443"
+##      volumes:
+##        - "./conf:/configuration:ro"
+##        - "/var/run/docker.sock:/var/run/docker.sock:ro"
     
 
 ##    bln_cake3:
@@ -43,15 +46,19 @@ services:
 ##      tty: true
 ##      build:
 ##        context: ../
-##        dockerfile: BLNCAKE3
+##        dockerfile: Dockerfile.cake3
 ##      ports:
 ##        - "8080:80"
 ##        - "4443:443"
-##      restart: always
-##      labels:
-##        - "traefik.http.routers.devel-blnsoftware.rule=Host('*.devel-blnsoftware.com')"
+##       restart: always
+##        labels:
+##          - "traefik.enable=true"
+##          - "traefik.tcp.routers.blnlocal.rule=HostSNI(`*.devel-blnsoftware.com`)"
+##          - "traefik.tcp.routers.blnlocal.tls=true"
+##          - "traefik.tcp.routers.blnlocal.tls.passthrough=true"
+##          - "traefik.tcp.services.blnlocal.loadbalancer.server.port=443"
 ##      volumes:
-##        - ../:/var/www/BridgeLoanNetwork
+##        - ../repos/BridgeLoanNetworkUpgrade:/var/www/BridgeLoanNetwork
 ##        - ./conf:/conf
 ##      links:
 ##        - "bln_db"
@@ -59,23 +66,24 @@ services:
           
     bln_web:
       depends_on:
-        - bln_traefik
+##        - bln_traefik
         - bln_db
       tty: true
-      labels: 
-        - "traefik.enable=true"
-        - "traefik.tcp.routers.blnlocal.rule=HostSNI(`bln.local`)"
-        - "traefik.tcp.routers.blnlocal.tls=true"
-        - "traefik.tcp.routers.blnlocal.tls.passthrough=true"
-        - "traefik.tcp.services.blnlocal.loadbalancer.server.port=443"
+##      labels: 
+##        - "traefik.enable=true"
+##        - "traefik.tcp.routers.blnlocal.rule=HostSNI(`*bln.local`)"
+##        - "traefik.tcp.routers.blnlocal.tls=true"
+##        - "traefik.tcp.routers.blnlocal.tls.passthrough=true"
+##        - "traefik.tcp.services.blnlocal.loadbalancer.server.port=443"
       build:
         context: ../
-        dockerfile: Dockerfile.bln
+        dockerfile: Dockerfile
       restart: always
       ports:
-         - "4443:443"
+         - "80:80"
+         - "443:443"
       volumes:
-        - ../repos/BridgeLoanNetwork:/var/www/BridgeLoanNetwork
+        - ../repos/:/var/www/repos
         - ./conf:/conf
       links:
         - "bln_db"
