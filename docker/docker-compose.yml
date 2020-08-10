@@ -22,59 +22,11 @@ services:
       restart: always
       ports:
         - "6379:6379"
-
-##    bln_traefik:
-##      image: traefik:v2.2
-##      command:
-##        - --entrypoints.web-secure.address=:443
-##        - --api.insecure=true
-##        - --providers.docker
-##        - --providers.file.directory=/configuration/
-##        - --providers.file.watch=true
-##      ports:
-##        - "8080:8080"
-##        - "80:80"
-##        - "443:443"
-##      volumes:
-##        - "./conf:/configuration:ro"
-##        - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    
-
-##    bln_cake3:
-##      depends_on: 
-##        - bln_db
-##      tty: true
-##      build:
-##        context: ../
-##        dockerfile: Dockerfile.cake3
-##      ports:
-##        - "8080:80"
-##        - "4443:443"
-##       restart: always
-##        labels:
-##          - "traefik.enable=true"
-##          - "traefik.tcp.routers.blnlocal.rule=HostSNI(`*.devel-blnsoftware.com`)"
-##          - "traefik.tcp.routers.blnlocal.tls=true"
-##          - "traefik.tcp.routers.blnlocal.tls.passthrough=true"
-##          - "traefik.tcp.services.blnlocal.loadbalancer.server.port=443"
-##      volumes:
-##        - ../repos/BridgeLoanNetworkUpgrade:/var/www/BridgeLoanNetwork
-##        - ./conf:/conf
-##      links:
-##        - "bln_db"
-##        - "bln_redis"   
-          
+        
     bln_web:
       depends_on:
-##        - bln_traefik
         - bln_db
       tty: true
-##      labels: 
-##        - "traefik.enable=true"
-##        - "traefik.tcp.routers.blnlocal.rule=HostSNI(`*bln.local`)"
-##        - "traefik.tcp.routers.blnlocal.tls=true"
-##        - "traefik.tcp.routers.blnlocal.tls.passthrough=true"
-##        - "traefik.tcp.services.blnlocal.loadbalancer.server.port=443"
       build:
         context: ../
         dockerfile: Dockerfile
@@ -83,8 +35,8 @@ services:
          - "80:80"
          - "443:443"
       volumes:
-        - ../repos/:/var/www/repos
-        - ./conf:/conf
+        - ../repos/:/var/www/repos:rw
+        - ./conf:/conf:rw
       links:
         - "bln_db"
         - "bln_redis"

@@ -31,7 +31,13 @@ RUN curl -sS https://getcomposer.org/installer | php && \
  mv composer.phar /usr/local/bin/composer
 
 # Install Node.js
-RUN apt-get install -y iputils-ping net-tools vim-tiny less
+RUN apt-get install -y iputils-ping net-tools vim-tiny less 
+# Install WKHTMLTOPDF
+RUN apt-get install -y wkhtmltopdf
+RUN cd ~ \
+    && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz \
+    && tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz \
+    && cp wkhtmltox/bin/wk* /usr/local/bin/
 
 #RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
 #  apt-get install -y nodejs
@@ -47,7 +53,7 @@ RUN pecl install redis-4.0.1 \
     && pecl install xdebug-2.6.0 \
     && docker-php-ext-enable redis xdebug
 
-RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++
+RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++ liberation-fonts 
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
