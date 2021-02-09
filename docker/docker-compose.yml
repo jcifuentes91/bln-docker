@@ -40,3 +40,24 @@ services:
       links:
         - "bln_db"
         - "bln_redis"
+
+    bln_wordpress:
+      depends_on:
+        - bln_db
+        - bln_web
+      image: wordpress:4.9
+      environment:
+      - WORDPRESS_DB_HOST=bln_db:3306
+      - WORDPRESS_DB_USER=master_admin
+      - WORDPRESS_DB_PASSWORD=master_admin
+      - WORDPRESS_DB_NAME=wordpress
+      restart: always    
+      ports: 
+        - "8080:80"
+      extra_hosts:
+        - "api.localbln:172.18.0.4"
+      volumes:
+        - ../repos/WordPressPlugin:/var/www/html/wp-content/plugins/bridgeloannetwork:rw
+      links:
+        - "bln_db"
+        - "bln_web"
